@@ -1,0 +1,27 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Round Robin</title>
+    </head>
+    <body>
+        <h1>Round Robin</h1>
+        <form action="/log">
+            <label for="postvalue">Value: </label><br>
+            <input type="text" id="postvalue" name="value" placeholder="Enter a message to save"><br><br>
+            <input type="button" value="Submit" onclick="loadPostMsg(postvalue)">
+        </form>
+
+        <div id="postrespmsg"></div>
+        
+        <script>
+            function loadPostMsg(name) {
+                let url = "/log?value=" + name.value;
+                fetch(url, { method: 'POST' })
+                    .then(x => x.text())
+                    .then(y => document.getElementById("postrespmsg").innerHTML = y);
+            }
+        </script>
+    </body>
+</html>

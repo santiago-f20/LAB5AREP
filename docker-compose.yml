@@ -1,0 +1,66 @@
+version: '2'
+
+services:
+    logservice1:
+        environment:
+            - PORT=35001
+        build:
+            context: ./logservice
+            dockerfile: Dockerfile
+        container_name: logservice1
+        image: santiagofetecua/roundrobin:logservice1
+        ports:
+            - 35001:35001
+        links:
+            - db
+    logservice2:
+        environment:
+            - PORT=35002
+        build:
+            context: ./logservice
+            dockerfile: Dockerfile
+        container_name: logservice2
+        image: santiagofetecua/roundrobin:logservice2
+        ports:
+            - 35002:35002
+        links:
+            - db
+    logservice3:
+        environment:
+            - PORT=35003
+        build:
+            context: ./logservice
+            dockerfile: Dockerfile
+        container_name: logservice3
+        image: santiagofetecua/roundrobin:logservice3
+        ports:
+            - 35003:35003
+        links:
+            - db
+    robin:
+        environment:
+            - PORT=35000
+        build:
+            context: ./roundrobin
+            dockerfile: Dockerfile
+        container_name: robin
+        image: santiagofetecua/roundrobin:robin
+        ports:
+            - 35000:35000
+        links:
+            - logservice1
+            - logservice2
+            - logservice3
+    db:
+        image: mongo:3.6.1
+        container_name: db
+        volumes:
+            - mongodb:/data/db
+            - mongodb_config:/data/configdb
+        ports:
+            - 27017:27017
+        command: mongod
+
+volumes:
+    mongodb:
+    mongodb_config:
